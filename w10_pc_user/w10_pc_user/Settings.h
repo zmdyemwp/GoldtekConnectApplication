@@ -1,0 +1,7 @@
+#ifndef		__W10_SETTINGS_DLG_H__
+#define		__W10_SETTINGS_DLG_H__
+
+INT_PTR CALLBACK SettingProc(HWND,UINT,WPARAM,LPARAM);
+
+#endif		//__W10_SETTINGS_DLG_H__
+
