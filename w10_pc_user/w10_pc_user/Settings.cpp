@@ -56,6 +56,20 @@ INT_PTR CALLBACK SettingProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 		if( ! getSetting() ||
 			! getTraining()) {
 				EndDialog(hDlg, LOWORD(wParam));
+		} else if(0) {
+			DWORD len = 0;
+			msg[0] = '\0';
+			for (DWORD i = 0; i < sizeof(g_Setting); i++) {
+				len = wcslen(msg);
+				if (len > 1024)
+					break;
+				swprintf(msg + len, 1024 - len, L"%02x ", (unsigned char)*((char*)&g_Setting + i));
+				if (0 == (1 + i) % 16) {
+					dmsg(msg);
+					msg[0] = '\0';
+				}
+			}
+			dmsg(msg);
 		}
 		g_hDlg = hDlg;
 		RefreshSettings();
@@ -996,7 +1010,7 @@ void reverseBool(unsigned int & v) {
 //GLOBAL_SETTING g_Setting;
 //GLOBAL_TRAINING g_Training;
 #include "stdio.h"
-#define		MAXERR		20
+#define		MAXERR		200
 #define		MAXWRITE	400
 #define		dim(x)		sizeof(x)/sizeof(x[0])
 const char read_cmd[] = "SPP+FREAD=%s\r\0";
@@ -1025,7 +1039,7 @@ BOOL getData(char* file_name, char* buffer, DWORD bufSize) {
 		DWORD read = 0;
 		//		check tag FREAD,
 		while( checkErrMax(err) && NULL == ptr ) {
-			Sleep(100);
+			//Sleep(100);	DO NOT use this, set read comm timeout instead
 			read = p->ReadCom(temp, 512);
 			ptr = strstr(temp, read_ack);
 			err++;
