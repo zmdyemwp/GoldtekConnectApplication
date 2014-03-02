@@ -243,6 +243,9 @@ void doSettings(void) {
 	ComIO * p = new ComIO(buffer);
 	if( p->InitComIO(TRUE) ) {
 		DialogBoxParam(g_hInst, MAKEINTRESOURCE(IDD_SETTINGS), NULL, SettingProc, (LPARAM)p);
+	} else {
+		swprintf(msg, 1024, L"InitComIO()::Fail...(%d)", GetLastError());
+		dmsg(msg);
 	}
 	delete p;
 }
@@ -252,9 +255,13 @@ void Refresh(void) {
 	if(NULL == pcio) {
 		ShowWindow(GetDlgItem(g_hdlg, IDC_SYNC), SW_SHOW);
 		ShowWindow(GetDlgItem(g_hdlg, IDC_STOP_SYNC), SW_HIDE);
+		EnableWindow(GetDlgItem(g_hdlg, IDC_UPDATE), TRUE);
+		EnableWindow(GetDlgItem(g_hdlg, IDC_SETTINGS), TRUE);
 	} else {
 		ShowWindow(GetDlgItem(g_hdlg, IDC_SYNC), SW_HIDE);
 		ShowWindow(GetDlgItem(g_hdlg, IDC_STOP_SYNC), SW_SHOW);
+		EnableWindow(GetDlgItem(g_hdlg, IDC_UPDATE), FALSE);
+		EnableWindow(GetDlgItem(g_hdlg, IDC_SETTINGS), FALSE);
 	}
 	//LeaveCriticalSection(&main_cs);
 }

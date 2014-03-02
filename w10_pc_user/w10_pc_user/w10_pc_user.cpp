@@ -82,12 +82,20 @@ INT_PTR CALLBACK dlgMainProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 				return TRUE;
 
 			case IDC_SETTINGS:
+				EnableWindow(GetDlgItem(g_hdlg, IDC_UPDATE), FALSE);
+				EnableWindow(GetDlgItem(g_hdlg, IDC_SYNC), FALSE);
 				doSettings();
+				EnableWindow(GetDlgItem(g_hdlg, IDC_UPDATE), TRUE);
+				EnableWindow(GetDlgItem(g_hdlg, IDC_SYNC), TRUE);
 				return TRUE;
 
 
 			case IDC_UPDATE:
 				{
+					EnableWindow(GetDlgItem(g_hdlg, IDC_UPDATE), FALSE);
+					EnableWindow(GetDlgItem(g_hdlg, IDC_SETTINGS), FALSE);
+					EnableWindow(GetDlgItem(g_hdlg, IDC_SYNC), FALSE);
+					//----------------------------------------------------
 					OPENFILENAME file;
 					memset(&file, 0, sizeof(OPENFILENAME));
 					file.lStructSize = sizeof(OPENFILENAME);
@@ -106,6 +114,10 @@ INT_PTR CALLBACK dlgMainProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 						dmsg(msg);
 						CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)doUpdate, (LPVOID)szFileName, 0, NULL);
 					}
+					//----------------------------------------------------
+					EnableWindow(GetDlgItem(g_hdlg, IDC_UPDATE), TRUE);
+					EnableWindow(GetDlgItem(g_hdlg, IDC_SETTINGS), TRUE);
+					EnableWindow(GetDlgItem(g_hdlg, IDC_SYNC), TRUE);
 				}
 				return TRUE;
 
